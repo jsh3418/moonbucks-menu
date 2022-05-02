@@ -1,5 +1,13 @@
 const $ = (selector) => document.querySelector(selector);
 
+const store = {
+  setLocalStorage(menu) {
+    localStorage.setItem("menu", JSON.stringify(menu));
+  },
+  getLocalStorage() {
+    return JSON.parse(localStorage.getItem("menu"))
+  },
+}
 
 function App() {
 
@@ -17,8 +25,8 @@ function App() {
 
   // 시작할 때
   this.init = () => {
-    if (localStorage.getItem("menu")) {
-      this.savedMenu = JSON.parse(localStorage.getItem("menu"));
+    if (store.getLocalStorage()) {
+      this.savedMenu = store.getLocalStorage();
       render();
     };
   };
@@ -59,7 +67,7 @@ function App() {
     const menuName = $("#espresso-menu-name").value;
     if (menuName !== "") {
       this.savedMenu[this.currentMenu].push({ name: menuName });
-      localStorage.setItem("menu", JSON.stringify(this.savedMenu));
+      store.setLocalStorage(this.savedMenu);
       render();
     } else {
       alert("메뉴 이름을 입력해주세요.");
@@ -70,7 +78,7 @@ function App() {
   const soldOutMenu = (e) => {
     const menuId = e.target.closest("li").dataset.menuId;
     this.savedMenu[this.currentMenu][menuId].soldOut = !this.savedMenu[this.currentMenu][menuId].soldOut;
-    localStorage.setItem("menu", JSON.stringify(this.savedMenu));
+    store.setLocalStorage(this.savedMenu);
     render();
   };
 
@@ -81,7 +89,7 @@ function App() {
     if (updatedMenu !== null && updatedMenu !== "") {
       const menuId = e.target.closest("li").dataset.menuId;
       this.savedMenu[this.currentMenu][menuId].name = updatedMenu;
-      localStorage.setItem("menu", JSON.stringify(this.savedMenu));
+      store.setLocalStorage(this.savedMenu);
       render();
     };
   };
@@ -91,7 +99,7 @@ function App() {
     if (confirm("삭제하시겠습니까?")) {
       const menuId = e.target.closest("li").dataset.menuId;
       this.savedMenu[this.currentMenu].splice(menuId, 1);
-      localStorage.setItem("menu", JSON.stringify(this.savedMenu));
+      store.setLocalStorage(this.savedMenu);
       render();
     };
   };
