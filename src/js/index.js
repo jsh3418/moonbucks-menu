@@ -1,5 +1,5 @@
 // [V]에스프레소 메뉴에 새로운 메뉴를 확인 버튼으로 추가한다.
-// [ ]에스프레소 메뉴에 새로운 메뉴를 엔터키 입력으로 추가한다.
+// [V]에스프레소 메뉴에 새로운 메뉴를 엔터키 입력으로 추가한다.
 // [ ]메뉴가 추가되고 나면, input은 빈 값으로 초기화한다.
 // [ ]사용자 입력값이 빈 값이라면 추가되지 않는다.
 // [ ]메뉴 수정 버튼을 눌러 메뉴 이름을 수정할 수 있게 한다. 브라우저에서 제공하는 prompt 인터페이스를 활용한다.
@@ -41,6 +41,11 @@ function App() {
   $("#espresso-menu-submit-button").addEventListener("click", () => {
     addMenuName();
   });
+
+  $("#espresso-menu-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addMenuName();
+  })
 
 };
 
