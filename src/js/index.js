@@ -4,7 +4,7 @@
 // [V]새로고침해도 데이터가 남아있게 한다.
 // [V]에스프레소, 프라푸치노, 블렌디드, 티바나, 디저트 각각의 종류별로 메뉴판을 관리할 수 있게 만든다.
 // [V]페이지에 최초로 접근할 때는 에스프레소 메뉴가 먼저 보이게 한다.
-// []품절 상태인 경우를 보여줄 수 있게, 품절 버튼을 추가하고 sold - out class를 추가하여 상태를 변경한다.
+// [V]품절 상태인 경우를 보여줄 수 있게, 품절 버튼을 추가하고 sold - out class를 추가하여 상태를 변경한다.
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -39,7 +39,7 @@ function App() {
     const template = this.menu[this.currentMenu].map((item, index) => {
       return `
       <li data-id="${index}" class="menu-list-item d-flex items-center py-2">
-        <span class="w-100 pl-2 menu-name">${item.name}</span>
+        <span class="${item.soldOut ? "sold-out" : ""} w-100 pl-2 menu-name">${item.name}</span>
         <button
           type="button"
           class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
@@ -58,7 +58,7 @@ function App() {
         >
           삭제
         </button>
-      </li>`}).join("");
+      </li > `}).join("");
     $("#espresso-menu-list").innerHTML = template;
     $("#espresso-menu-name").value = "";
     menuCount();
@@ -94,10 +94,17 @@ function App() {
       render();
     };
   };
+  // 메뉴 품절 기능
+  const soldOutMenu = (e) => {
+    const id = e.target.closest("li").dataset.id;
+    this.menu[this.currentMenu][id].soldOut = !this.menu[this.currentMenu][id].soldOut;
+    store.setLocalStorage(this.menu);
+    render();
+  }
   // 메뉴 카운트 기능
   const menuCount = () => {
     const menuCount = $("#espresso-menu-list").querySelectorAll("li").length;
-    $(".menu-count").innerText = `총 ${menuCount}개`;
+    $(".menu-count").innerText = `총 ${menuCount} 개`;
   };
 
   // 확인 버튼 메뉴 추가 이벤트
@@ -117,6 +124,9 @@ function App() {
     if (e.target.classList.contains("menu-remove-button")) {
       removeMenuName(e);
     };
+    if (e.target.classList.contains("menu-sold-out-button")) {
+      soldOutMenu(e);
+    }
   });
   // 메뉴판 클릭 이벤트
   $("nav").addEventListener("click", (e) => {
