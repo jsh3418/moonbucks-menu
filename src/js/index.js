@@ -3,7 +3,7 @@
 // [V]메뉴가 추가되고 나면, input은 빈 값으로 초기화한다.
 // [V]사용자 입력값이 빈 값이라면 추가되지 않는다.
 // [V]메뉴 수정 버튼을 눌러 메뉴 이름을 수정할 수 있게 한다. 브라우저에서 제공하는 prompt 인터페이스를 활용한다.
-// [ ]메뉴 삭제 버튼을 이용하여 메뉴 삭제할 수 있다. 브라우저에서 제공하는 confirm 인터페이스를 활용한다.
+// [V]메뉴 삭제 버튼을 이용하여 메뉴 삭제할 수 있다. 브라우저에서 제공하는 confirm 인터페이스를 활용한다.
 // [ ]총 메뉴 갯수를 count하여 상단에 보여준다.
 
 const $ = (selector) => document.querySelector(selector);
@@ -44,7 +44,15 @@ function App() {
   // 메뉴명 수정 기능
   const updateMenuName = (e) => {
     const updatedMenuName = prompt("수정할 메뉴명을 입력해주세요.", e.target.closest("li").querySelector(".menu-name").innerText);
-    e.target.closest("li").querySelector(".menu-name").innerText = updatedMenuName;
+    if (updatedMenuName !== "" && updatedMenuName !== null) {
+      e.target.closest("li").querySelector(".menu-name").innerText = updatedMenuName;
+    }
+  };
+  // 메뉴 삭제 기능
+  const removeMenuName = (e) => {
+    if (confirm("정말 삭제하시겠습니까?")) {
+      e.target.closest("li").remove();
+    };
   };
 
   // 확인 버튼 메뉴 추가 이벤트
@@ -56,11 +64,14 @@ function App() {
     e.preventDefault();
     addMenuName();
   });
-  // 수정 버튼 이벤트
+  // 수정 버튼, 삭제 버튼 이벤트
   $("#espresso-menu-list").addEventListener("click", (e) => {
     if (e.target.classList.contains("menu-edit-button")) {
       updateMenuName(e);
     };
+    if (e.target.classList.contains("menu-remove-button")) {
+      removeMenuName(e);
+    }
   });
 
 };
