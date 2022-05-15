@@ -1,7 +1,7 @@
 // [V]메뉴를 추가할 때 localStorage에 데이터를 저장한다.
 // [V]메뉴를 수정할 때 localStorage에 데이터를 저장한다.
 // [V]메뉴를 삭제할 때 localStorage에 데이터를 저장한다.
-// []새로고침해도 데이터가 남아있게 한다.
+// [V]새로고침해도 데이터가 남아있게 한다.
 // []에스프레소, 프라푸치노, 블렌디드, 티바나, 디저트 각각의 종류별로 메뉴판을 관리할 수 있게 만든다.
 // []페이지에 최초로 접근할 때는 에스프레소 메뉴가 먼저 보이게 한다.
 // []품절 상태인 경우를 보여줄 수 있게, 품절 버튼을 추가하고 sold - out class를 추가하여 상태를 변경한다.
@@ -12,20 +12,22 @@ const store = {
   setLocalStorage(menu) {
     localStorage.setItem("menu", JSON.stringify(menu));
   },
+  getLocalStorage() {
+    return JSON.parse(localStorage.getItem("menu"));
+  },
 }
 
 function App() {
   this.menu = [];
 
-  // 메뉴명 추가 기능
-  const addMenuName = () => {
-    const menuName = $("#espresso-menu-name").value;
-    if (menuName === "") {
-      alert("메뉴명을 입력해주세요.")
-      return;
-    }
-    this.menu.push({ name: menuName });
-    store.setLocalStorage(this.menu);
+  this.init = () => {
+    if (store.getLocalStorage()) {
+      this.menu = store.getLocalStorage();
+      render();
+    };
+  };
+
+  const render = () => {
     const template = this.menu.map((item, index) => {
       return `
       <li data-id="${index}" class="menu-list-item d-flex items-center py-2">
@@ -52,15 +54,27 @@ function App() {
     $("#espresso-menu-list").innerHTML = template;
     $("#espresso-menu-name").value = "";
     menuCount();
+  }
+
+  // 메뉴명 추가 기능
+  const addMenuName = () => {
+    const menuName = $("#espresso-menu-name").value;
+    if (menuName === "") {
+      alert("메뉴명을 입력해주세요.")
+      return;
+    }
+    this.menu.push({ name: menuName });
+    store.setLocalStorage(this.menu);
+    render();
   };
   // 메뉴명 수정 기능
   const updateMenuName = (e) => {
     const updatedMenuName = prompt("수정할 메뉴명을 입력해주세요.", e.target.closest("li").querySelector(".menu-name").innerText);
     if (updatedMenuName !== "" && updatedMenuName !== null) {
-      e.target.closest("li").querySelector(".menu-name").innerText = updatedMenuName;
       const id = e.target.closest("li").dataset.id;
       this.menu[id].name = updatedMenuName;
       store.setLocalStorage(this.menu);
+      render();
     };
   };
   // 메뉴 삭제 기능
@@ -69,8 +83,7 @@ function App() {
       const id = e.target.closest("li").dataset.id;
       this.menu.splice(id, 1);
       store.setLocalStorage(this.menu);
-      e.target.closest("li").remove();
-      menuCount();
+      render();
     };
   };
   // 메뉴 카운트 기능
@@ -101,3 +114,4 @@ function App() {
 };
 
 const app = new App();
+app.init();
