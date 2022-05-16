@@ -1,21 +1,5 @@
-// [V]메뉴를 추가할 때 localStorage에 데이터를 저장한다.
-// [V]메뉴를 수정할 때 localStorage에 데이터를 저장한다.
-// [V]메뉴를 삭제할 때 localStorage에 데이터를 저장한다.
-// [V]새로고침해도 데이터가 남아있게 한다.
-// [V]에스프레소, 프라푸치노, 블렌디드, 티바나, 디저트 각각의 종류별로 메뉴판을 관리할 수 있게 만든다.
-// [V]페이지에 최초로 접근할 때는 에스프레소 메뉴가 먼저 보이게 한다.
-// [V]품절 상태인 경우를 보여줄 수 있게, 품절 버튼을 추가하고 sold - out class를 추가하여 상태를 변경한다.
-
-const $ = (selector) => document.querySelector(selector);
-
-const store = {
-  setLocalStorage(menu) {
-    localStorage.setItem("menu", JSON.stringify(menu));
-  },
-  getLocalStorage() {
-    return JSON.parse(localStorage.getItem("menu"));
-  },
-}
+import { $ } from './utils/DOM.js';
+import { store } from './utils/store.js';
 
 function App() {
   this.menu = {
@@ -58,7 +42,7 @@ function App() {
         >
           삭제
         </button>
-      </li > `}).join("");
+      </li>`}).join("");
     $("#espresso-menu-list").innerHTML = template;
     $("#espresso-menu-name").value = "";
     menuCount();
