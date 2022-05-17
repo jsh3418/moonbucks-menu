@@ -22,4 +22,4 @@ const menuListItemTemplate = (item, index) => {
         </button>
       </li>`};
 
-export { menuListItemTemplate };
+export { menuListItemTemplate }
