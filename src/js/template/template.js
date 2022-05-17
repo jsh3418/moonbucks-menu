@@ -1,4 +1,4 @@
-export const menuListItemTemplate = (item, index) => {
+const menuListItemTemplate = (item, index) => {
   return `
       <li data-id="${index}" class="menu-list-item d-flex items-center py-2">
         <span class="${item.soldOut ? "sold-out" : ""} w-100 pl-2 menu-name">${item.name}</span>
@@ -21,3 +21,5 @@ export const menuListItemTemplate = (item, index) => {
           삭제
         </button>
       </li>`};
+
+export { menuListItemTemplate };
