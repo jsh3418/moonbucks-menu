@@ -1,5 +1,6 @@
 import { $ } from './utils/DOM.js';
 import { store } from './utils/store.js';
+import { menuListItemTemplate } from './template/template.js';
 
 let menu = {
   espresso: [],
@@ -20,28 +21,8 @@ function init() {
 
 const render = () => {
   const template = menu[currentMenu].map((item, index) => {
-    return `
-      <li data-id="${index}" class="menu-list-item d-flex items-center py-2">
-        <span class="${item.soldOut ? "sold-out" : ""} w-100 pl-2 menu-name">${item.name}</span>
-        <button
-          type="button"
-          class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
-        > 
-          품절
-        </button>
-        <button
-          type="button"
-          class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
-        >
-          수정
-        </button>
-        <button
-          type="button"
-          class="bg-gray-50 text-gray-500 text-sm menu-remove-button"
-        >
-          삭제
-        </button>
-      </li>`}).join("");
+    return menuListItemTemplate(item, index)
+  }).join("");
   $("#espresso-menu-list").innerHTML = template;
   $("#espresso-menu-name").value = "";
   menuCount();
@@ -87,7 +68,7 @@ const soldOutMenu = (e) => {
 // 메뉴 카운트 기능
 const menuCount = () => {
   const menuCount = $("#espresso-menu-list").querySelectorAll("li").length;
-  $(".menu-count").innerText = `총 ${menuCount} 개`;
+  $(".menu-count").innerText = `총 ${menuCount}개`;
 };
 
 // 확인 버튼 메뉴 추가 이벤트
